@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>jakpat minecraft server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="600">
+  <link href="output.css" rel="stylesheet">
+</head>
+<body class="main">
+    <div class="center-container">
+        <img src="block.png" class="h-36 w-36" id="server-icon"/>
+        <div class="flex flex-col ">
+            <h1 class="text-7xl font-medium text-white-800 mb-5" id="server-ip">right-crossing.joinmc.link</h1>
+            <span class="text-gray-300 text-lg mb-3 server-online" id="motd" style="font-size: 1.5rem;">Offline</span>
+            <div class=" text-3xl"><span class="font-semibold server-status" id="player-count">00</span> Players Online</div>
+  <style>
+    body {
+      background-image: url('');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: hsl(0, 0%, 100%);
+      text-align: center;
+      padding-top: 50px;
+    }
+    p {
+      font-size: 1rem;
+      color: #000000;
+      text-align: center;
+    }
+    button {
+      background-color: #992df0;
+      color: #fff;
+      border: none;
+      padding: 20px 40px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px auto;
+      display: block;
+    }
+    button:hover {
+      background-color: #7a1dbd;
+    }
+  </style>
+  </style>
+  <style>
+    .image-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: #992df0;
+      color: #fff;
+      border: none;
+      padding: 3px 3px;
+      border-radius: 1px;
+      cursor: pointer;
+      margin: 10px auto;
+      font-size: 1rem;
+    }
+    .image-button:hover {
+      background-color: #7a1dbd;
+    }
+    .image-button img {
+      width: px;
+      height: px;
+    }
+  </style>
+ <p></p>
+ <form action="https://discord.gg/mKjnX2TKpJ" method="get" target="_blank">
+   <button type="submit" class="image-button">
+     <img src="discord-icon.png" alt="Discord icon">
+   </button>
+</div>
+</div>
+   <script>
+    function initServerData(serverIp,serverPort){
+        const serverIpElement = document.getElementById('server-ip');
+        serverIpElement.innerHTML = serverIp;
+    
+        console.log('https://mcapi.us/server/status?ip='+serverIp+'&port='+serverPort);
+        fetch('https://mcapi.us/server/status?ip='+serverIp+'&port='+serverPort)
+        .then(response => response.json())
+        .then(data => handleServerStatus(data));
+    
+        function handleServerStatus(data){
+            if(data.status=='error'){
+                console.log(data.error);
+                return false;
+            }
+    
+            const motd = document.getElementById("motd");
+            motd.innerHTML = data.motd;
+    
+            const playerCounter = document.getElementById("player-count");
+            playerCounter.innerHTML = data.players.now;
+    
+            const logo = document.getElementById("server-icon");
+            logo.src = data.favicon;
+        } 
+    
+    }
+    
+    initServerData("right-crossing.joinmc.link","25565");
+    
+    </script>
+    <style>
+      .center-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .center-bottom h6 {
+        font-size: larger;
+        color: white;
+      }
+    </style>
+    <h6 class="center-bottom">by jakpat</h6>
