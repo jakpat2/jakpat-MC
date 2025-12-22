@@ -20,30 +20,45 @@
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('jakpat-MC_Logo-no-text.png');
             background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-position: center;
             margin: 0; color: white; font-family: ui-sans-serif, system-ui, sans-serif;
+            overflow-x: hidden;
         }
         .main-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        
         .glass-card {
-            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 950px;
             display: flex; flex-direction: row; align-items: center; gap: 2.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
+
+        .ip-container { width: 100%; overflow: visible; display: flex; justify-content: flex-start; }
+
         #server-ip {
-            font-size: clamp(1.4rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.1;
-            white-space: nowrap; display: inline-block; padding-right: 0.7em; transition: color 0.3s ease;
+            font-weight: 800; white-space: nowrap; display: inline-block;
+            line-height: 1.1; transition: color 0.3s ease; margin: 0; padding: 0;
         }
+
         .version-text {
             display: inline-block; background: rgba(255, 255, 255, 0.1); padding: 2px 10px;
             border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #d1d5db;
             margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;
         }
-        .copy-feedback { font-size: 0.85rem; color: #9ca3af; margin-top: 4px; margin-bottom: 1.5rem; }
+        .copy-feedback { font-size: 0.85rem; color: #9ca3af; margin-top: 4px; margin-bottom: 1.5rem; height: 1.25rem; }
         .discord-btn { transition: all 0.2s ease-in-out; background-color: #5865F2; }
         .discord-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        
+        /* Rules Section Styling - Matching Screenshot 201835.png */
         .rules-section {
-            max-width: 950px; margin: 0 auto 100px auto; padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.6); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 950px; margin: 0 auto 100px auto; padding: 3rem;
+            background: rgba(0, 0, 0, 0.8); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
+
+        .rules-footer {
+            margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-style: italic; font-size: 0.9rem; color: #9ca3af; text-align: center;
+        }
+
         #backToTop {
             position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.15);
             backdrop-filter: blur(5px); width: 40px; height: 40px; border-radius: 12px;
@@ -51,9 +66,12 @@
             cursor: pointer; opacity: 0; transition: 0.3s; z-index: 100;
         }
         #backToTop.show { opacity: 1; }
+
         @media (max-width: 768px) {
-            .glass-card { flex-direction: column; text-align: center; }
-            #server-ip { white-space: normal; word-break: break-all; padding-right: 0; }
+            .glass-card { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+            .ip-container { justify-content: center; }
+            #server-icon { width: 8rem; height: 8rem; }
+            .rules-section { padding: 2rem 1.5rem; margin: 0 15px 50px 15px; }
         }
     </style>
 </head>
@@ -67,20 +85,21 @@
 
     <div class="main-container">
         <div class="glass-card">
-            <img src="jakpat-MC_Logo-64-V2.png" id="server-icon" class="w-32 h-32 md:w-44 md:h-44 rounded-xl shadow-2xl" alt="Mascot">
+            <img src="jakpat-MC_Logo-64-V2.png" id="server-icon" class="w-32 h-32 md:w-44 md:h-44 rounded-xl shadow-2xl" alt="Logo">
             
-            <div class="flex-1 min-w-0">
+            <div class="flex-1 min-w-0 w-full">
                 <div class="version-text">Java 1.21.10+</div>
-                <div class="block">
+                
+                <div class="ip-container">
                     <h1 id="server-ip" class="hover:text-red-500 cursor-pointer" onclick="copyIP()">
-                        jakpat-mc.duckdns.org
+                        jakpat-mc.duckdns.org:51490
                     </h1>
                 </div>
                 
                 <div id="copy-text" class="copy-feedback">Click IP to copy</div>
                 
                 <div id="motd" class="text-base md:text-lg mb-6 min-h-[1.5em] leading-relaxed">
-                    <span class="text-gray-400 italic">Connecting...</span>
+                    <span class="text-gray-400 italic">Connecting to server...</span>
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-6 justify-center md:justify-start">
@@ -102,49 +121,57 @@
     </div>
 
     <div id="rules" class="rules-section">
-        <h2 class="text-3xl font-bold mb-10 text-center text-red-500 uppercase tracking-widest">Server & Community Rules</h2>
-        <div class="grid md:grid-cols-2 gap-12">
-            <div class="space-y-8">
-                <div>
-                    <h3 class="text-xl font-bold text-blue-400 mb-2">1. Conduct & Respect</h3>
-                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                        Treat everyone with dignity. We have zero tolerance for toxicity, bullying, or hate speech (sexism, racism, etc.). Keep it PG-13—no NSFW or disturbing content.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold text-blue-400 mb-2">2. Fair Play</h3>
-                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                        No hacking, X-ray, or unfair clients. We keep the game fair for everyone. Please report any bugs or exploits to the staff instead of using them.
-                    </p>
-                </div>
+        <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center text-[#ff4b4b] uppercase tracking-widest">Server & Community Rules</h2>
+        
+        <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+            <div>
+                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">1. Conduct & Respect</h3>
+                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    Treat everyone with dignity. We have zero tolerance for toxicity, bullying, or hate speech (sexism, racism, etc.). Keep it PG-13—no NSFW or disturbing content.
+                </p>
             </div>
-            <div class="space-y-8">
-                <div>
-                    <h3 class="text-xl font-bold text-blue-400 mb-2">3. Griefing & Theft</h3>
-                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                        Respect the work of others. No destroying builds or stealing items, whether the land is claimed or unclaimed.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold text-blue-400 mb-2">4. Advertising & Spam</h3>
-                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                        Do not promote other servers, Discord links, or outside websites. Avoid spamming chat to keep it readable for everyone.
-                    </p>
-                </div>
+            
+            <div>
+                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">3. Griefing & Theft</h3>
+                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    Respect the work of others. No destroying builds or stealing items, whether the land is claimed or unclaimed.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">2. Fair Play</h3>
+                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    No hacking, X-ray, or unfair clients. We keep the game fair for everyone. Please report any bugs or exploits to the staff instead of using them.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">4. Advertising & Spam</h3>
+                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                    Do not promote other servers, Discord links, or outside websites. Avoid spamming chat to keep it readable for everyone.
+                </p>
             </div>
         </div>
-        
-        <div class="mt-12 pt-8 border-t border-white/10 text-center">
-            <p class="text-gray-400 text-sm italic">
-                Staff reserve the right to handle behavior that is harmful to the community. 
-                If you feel unsafe, please contact an administrator immediately.
-            </p>
+
+        <div class="rules-footer">
+            Staff reserve the right to handle behavior that is harmful to the community. If you feel unsafe, please contact an administrator immediately.
         </div>
     </div>
 
     <script>
         const ip = "jakpat-mc.duckdns.org";
         const port = "51490";
+
+        function fitText() {
+            const container = document.querySelector('.ip-container');
+            const text = document.getElementById('server-ip');
+            let fontSize = window.innerWidth > 768 ? 45 : 35; 
+            text.style.fontSize = fontSize + 'px';
+            while (text.offsetWidth > container.offsetWidth && fontSize > 8) {
+                fontSize--;
+                text.style.fontSize = fontSize + 'px';
+            }
+        }
 
         async function updateStatus() {
             try {
@@ -161,14 +188,12 @@
                     sText.innerText = "Online";
                     sText.style.color = "#4ade80";
                     sDot.style.backgroundColor = "#22c55e";
-                    sDot.style.boxShadow = "0 0 10px #22c55e";
                 } else {
                     motdEl.innerHTML = '<span class="text-red-400 italic">Offline</span>';
                     playerCountEl.innerText = "0";
                     sText.innerText = "Offline";
                     sText.style.color = "#ef4444";
                     sDot.style.backgroundColor = "#ef4444";
-                    sDot.style.boxShadow = "none";
                 }
             } catch (err) { console.error("Update failed"); }
         }
@@ -178,19 +203,24 @@
             const feedback = document.getElementById('copy-text');
             feedback.style.color = "#4ade80";
             feedback.innerHTML = "✓ IP Copied!";
-            setTimeout(() => { feedback.style.color = "#9ca3af"; feedback.innerHTML = "Click IP to copy"; }, 2500);
+            setTimeout(() => { 
+                feedback.style.color = "#9ca3af"; 
+                feedback.innerHTML = "Click IP to copy"; 
+            }, 2500);
         }
+
+        window.addEventListener('load', () => { fitText(); updateStatus(); });
+        window.addEventListener('resize', fitText);
+        setInterval(updateStatus, 30000);
 
         window.onscroll = function() {
             const btn = document.getElementById("backToTop");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.classList.add("show"); }
-            else { btn.classList.remove("show"); }
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.classList.add("show");
+            } else {
+                btn.classList.remove("show");
+            }
         };
-
-        updateStatus();
-        setInterval(updateStatus, 30000);
     </script>
 </body>
 </html>
-
-
