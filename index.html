@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>jakpat-MC</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <meta property="og:title" content="jakpat-MC Server">
     <meta property="og:description" content="Join our Java 1.21.10+ Survival Server!">
@@ -14,13 +14,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        html { scroll-behavior: smooth; }
+        /* CRITICAL FIX: Ensures padding doesn't add to width */
+        * { box-sizing: border-box; }
+
+        html, body { 
+            scroll-behavior: smooth; 
+            margin: 0; 
+            padding: 0;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden; /* Hard lock against side-scrolling */
+            position: relative;
+        }
         
         body {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('jakpat-MC_Logo-no-text.png');
             background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-position: center;
-            margin: 0; color: white; font-family: ui-sans-serif, system-ui, sans-serif;
-            overflow-x: hidden;
+            color: white; font-family: ui-sans-serif, system-ui, sans-serif;
         }
 
         .main-container { 
@@ -28,8 +38,8 @@
             grid-template-rows: 28vh auto auto 120px;
             justify-items: center;
             width: 100%;
-            padding: 0 20px;
-            box-sizing: border-box;
+            max-width: 100%;
+            padding: 0 15px;
         }
         
         .glass-card {
@@ -38,14 +48,13 @@
             border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 950px;
             display: flex; flex-direction: row; align-items: center; gap: 2.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-            box-sizing: border-box;
         }
 
         .ip-container { 
             width: 100%; 
             display: flex; 
             justify-content: flex-start; 
-            overflow: visible;
+            overflow: hidden; /* Prevents IP from leaking out */
         }
 
         #server-ip { 
@@ -70,7 +79,6 @@
             padding: 3rem;
             background: rgba(0, 0, 0, 0.8); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            box-sizing: border-box;
         }
 
         .rules-footer { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-style: italic; font-size: 0.9rem; color: #9ca3af; text-align: center; }
@@ -83,11 +91,11 @@
             .glass-card { 
                 flex-direction: column; 
                 text-align: center; 
-                padding: 2.5rem 1.5rem; 
+                padding: 2rem 1rem; 
             }
             .ip-container { justify-content: center; }
             #server-icon { width: 8rem; height: 8rem; }
-            .rules-section { padding: 2rem 1.5rem; margin-top: 80px; }
+            .rules-section { padding: 2rem 1rem; margin-top: 80px; }
         }
     </style>
 </head>
@@ -181,10 +189,13 @@
         function fitText() {
             const container = document.querySelector('.ip-container');
             const text = document.getElementById('server-ip');
-            let fontSize = window.innerWidth > 768 ? 45 : 28; 
+            
+            let fontSize = window.innerWidth > 768 ? 45 : 32; 
             text.style.fontSize = fontSize + 'px';
-            while (text.offsetWidth > container.offsetWidth && fontSize > 10) {
-                fontSize--;
+            
+            // Aggressive loop: shrinks text until it is definitely smaller than the card
+            while (text.offsetWidth >= (container.offsetWidth - 5) && fontSize > 8) {
+                fontSize -= 0.5;
                 text.style.fontSize = fontSize + 'px';
             }
         }
