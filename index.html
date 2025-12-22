@@ -12,66 +12,82 @@
 
     <link rel="icon" type="image/png" href="jakpat-MC_Logo-64-V2.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/m-chandler/minecraft-motd-parser/dist/css/motd.min.css">
 
     <style>
-        :root { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; }
+        
         body {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('jakpat-MC_Logo-no-text.png');
             background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-position: center;
             margin: 0; color: white; font-family: ui-sans-serif, system-ui, sans-serif;
             overflow-x: hidden;
         }
-        .main-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+
+        .main-container { 
+            display: grid;
+            grid-template-rows: 28vh auto auto 120px;
+            justify-items: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
         
         .glass-card {
+            grid-row: 2;
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 950px;
             display: flex; flex-direction: row; align-items: center; gap: 2.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            box-sizing: border-box;
         }
 
-        .ip-container { width: 100%; overflow: visible; display: flex; justify-content: flex-start; }
-
-        #server-ip {
-            font-weight: 800; white-space: nowrap; display: inline-block;
-            line-height: 1.1; transition: color 0.3s ease; margin: 0; padding: 0;
+        .ip-container { 
+            width: 100%; 
+            display: flex; 
+            justify-content: flex-start; 
+            overflow: visible;
         }
 
-        .version-text {
-            display: inline-block; background: rgba(255, 255, 255, 0.1); padding: 2px 10px;
-            border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #d1d5db;
-            margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;
+        #server-ip { 
+            font-weight: 800; 
+            line-height: 1.1; 
+            transition: color 0.3s ease; 
+            margin: 0; padding: 0;
+            white-space: nowrap; 
+            display: inline-block;
         }
+
+        .version-text { display: inline-block; background: rgba(255, 255, 255, 0.1); padding: 2px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #d1d5db; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
         .copy-feedback { font-size: 0.85rem; color: #9ca3af; margin-top: 4px; margin-bottom: 1.5rem; height: 1.25rem; }
         .discord-btn { transition: all 0.2s ease-in-out; background-color: #5865F2; }
         .discord-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
         
-        /* Rules Section Styling - Matching Screenshot 201835.png */
         .rules-section {
-            max-width: 950px; margin: 0 auto 100px auto; padding: 3rem;
+            grid-row: 3;
+            max-width: 950px; 
+            width: 100%;
+            margin-top: clamp(120px, 20vw, 220px); 
+            padding: 3rem;
             background: rgba(0, 0, 0, 0.8); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            box-sizing: border-box;
         }
 
-        .rules-footer {
-            margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-style: italic; font-size: 0.9rem; color: #9ca3af; text-align: center;
-        }
+        .rules-footer { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-style: italic; font-size: 0.9rem; color: #9ca3af; text-align: center; }
 
-        #backToTop {
-            position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(5px); width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2);
-            cursor: pointer; opacity: 0; transition: 0.3s; z-index: 100;
-        }
+        #backToTop { position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; opacity: 0; transition: 0.3s; z-index: 100; }
         #backToTop.show { opacity: 1; }
 
         @media (max-width: 768px) {
-            .glass-card { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+            .main-container { grid-template-rows: 60px auto auto 60px; }
+            .glass-card { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 2.5rem 1.5rem; 
+            }
             .ip-container { justify-content: center; }
             #server-icon { width: 8rem; height: 8rem; }
-            .rules-section { padding: 2rem 1.5rem; margin: 0 15px 50px 15px; }
+            .rules-section { padding: 2rem 1.5rem; margin-top: 80px; }
         }
     </style>
 </head>
@@ -118,43 +134,43 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="rules" class="rules-section">
-        <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center text-[#ff4b4b] uppercase tracking-widest">Server & Community Rules</h2>
-        
-        <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
-            <div>
-                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">1. Conduct & Respect</h3>
-                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                    Treat everyone with dignity. We have zero tolerance for toxicity, bullying, or hate speech (sexism, racism, etc.). Keep it PG-13—no NSFW or disturbing content.
-                </p>
-            </div>
+        <div id="rules" class="rules-section">
+            <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center text-[#ff4b4b] uppercase tracking-widest">Server & Community Rules</h2>
             
-            <div>
-                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">3. Griefing & Theft</h3>
-                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                    Respect the work of others. No destroying builds or stealing items, whether the land is claimed or unclaimed.
-                </p>
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">1. Conduct & Respect</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Treat everyone with dignity. We have zero tolerance for toxicity, bullying, or hate speech (sexism, racism, etc.). Keep it PG-13—no NSFW or disturbing content.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">3. Griefing & Theft</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Respect the work of others. No destroying builds or stealing items, whether the land is claimed or unclaimed.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">2. Fair Play</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        No hacking, X-ray, or unfair clients. We keep the game fair for everyone. Please report any bugs or exploits to the staff instead of using them.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">4. Advertising & Spam</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Do not promote other servers, Discord links, or outside websites. Avoid spamming chat to keep it readable for everyone.
+                    </p>
+                </div>
             </div>
 
-            <div>
-                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">2. Fair Play</h3>
-                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                    No hacking, X-ray, or unfair clients. We keep the game fair for everyone. Please report any bugs or exploits to the staff instead of using them.
-                </p>
+            <div class="rules-footer">
+                Staff reserve the right to handle behavior that is harmful to the community. If you feel unsafe, please contact an administrator immediately.
             </div>
-
-            <div>
-                <h3 class="text-xl font-bold text-[#3b82f6] mb-2">4. Advertising & Spam</h3>
-                <p class="text-gray-300 text-sm md:text-base leading-relaxed">
-                    Do not promote other servers, Discord links, or outside websites. Avoid spamming chat to keep it readable for everyone.
-                </p>
-            </div>
-        </div>
-
-        <div class="rules-footer">
-            Staff reserve the right to handle behavior that is harmful to the community. If you feel unsafe, please contact an administrator immediately.
         </div>
     </div>
 
@@ -165,9 +181,9 @@
         function fitText() {
             const container = document.querySelector('.ip-container');
             const text = document.getElementById('server-ip');
-            let fontSize = window.innerWidth > 768 ? 45 : 35; 
+            let fontSize = window.innerWidth > 768 ? 45 : 28; 
             text.style.fontSize = fontSize + 'px';
-            while (text.offsetWidth > container.offsetWidth && fontSize > 8) {
+            while (text.offsetWidth > container.offsetWidth && fontSize > 10) {
                 fontSize--;
                 text.style.fontSize = fontSize + 'px';
             }
@@ -195,6 +211,7 @@
                     sText.style.color = "#ef4444";
                     sDot.style.backgroundColor = "#ef4444";
                 }
+                fitText(); 
             } catch (err) { console.error("Update failed"); }
         }
 
@@ -209,7 +226,7 @@
             }, 2500);
         }
 
-        window.addEventListener('load', () => { fitText(); updateStatus(); });
+        window.addEventListener('load', () => { updateStatus(); fitText(); });
         window.addEventListener('resize', fitText);
         setInterval(updateStatus, 30000);
 
