@@ -20,60 +20,50 @@
         
         /* TERMINAL PANEL */
         #minimal-terminal {
-            display: none;
-            margin-top: 50px;
-            width: 100%;
-            max-width: 950px;
-            background: rgba(0, 0, 0, 0.85); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px); 
-            border: 1px solid rgba(239, 68, 68, 0.3); 
-            border-radius: 28px; 
-            padding: 22px 30px;
+            display: none; margin-top: 50px; width: 100%; max-width: 950px;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 28px; padding: 22px 30px;
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.05), 0 25px 50px -12px rgba(0, 0, 0, 0.9);
-            font-size: clamp(14px, 1.8vw, 18px);
-            line-height: 1.6;
+            font-size: clamp(14px, 1.8vw, 18px); line-height: 1.6;
         }
 
         .terminal-prompt { color: #ef4444; font-weight: bold; margin-right: 12px; }
-        .cursor {
-            display: inline-block;
-            width: 8px; height: 1.1em;
-            background: #ef4444; margin-left: 4px;
-            animation: blink 1.2s infinite; vertical-align: middle;
-        }
+        .cursor { display: inline-block; width: 8px; height: 1.1em; background: #ef4444; margin-left: 4px; animation: blink 1.2s infinite; vertical-align: middle; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* GLASS PANELS */
+        /* GENERAL GLASS PANEL SPACING */
         .glass-panel { 
-            background: rgba(0, 0, 0, 0.85); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); 
-            width: 100%; 
-            max-width: 950px; 
-            margin-top: 160px; /* Standard gap between sections */
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); width: 100%; max-width: 950px;
+            margin-top: 100px; /* Gap between sections like Info and Rules */
         }
 
-        /* DYNAMIC TOP SPACING: If terminal is NOT visible (display: block), push card down further */
-        .main-card { display: flex; flex-direction: row; align-items: center; gap: 2.5rem; padding: 3rem; margin-top: 200px; }
+        /* FIRST GLASS PANEL - Kept the 160px gap from the main card to the next section */
+        .main-card { 
+            display: flex; flex-direction: row; align-items: center; gap: 2.5rem; padding: 3rem; 
+            margin-top: 200px; /* Gap from top of page */
+            margin-bottom: 60px; /* Additional push to ensure the 160px total gap */
+        }
         
-        /* If terminal IS visible, tuck card closer to it */
+        /* Special handling to restore the 160px gap after the first card */
+        .main-card + .glass-panel { margin-top: 160px; }
+
         #minimal-terminal[style*="display: block"] + .main-card { margin-top: 80px; }
         
-        .info-section { padding: 3rem; }
-        .rules-section { padding: 3rem; }
-        
-        /* IP & BADGES */
+        /* VIDEO SECTION */
+        #trailer-section { display: none; padding: 3rem; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        .info-section, .rules-section { padding: 3rem; }
         .ip-wrapper { width: 100%; display: flex; justify-content: flex-start; overflow: visible; padding-bottom: 12px; }
         #server-ip { font-weight: 800; line-height: 1.3; transition: color 0.3s ease; white-space: nowrap; display: inline-block; }
         
         .badge-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
         .version-text { display: inline-block; border: 1px solid rgba(255, 255, 255, 0.15); padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; }
-        
+
         .wip-badge { background: #3b82f6; color: white; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 12px; }
         .copy-feedback { font-size: 0.85rem; color: #6b7280; margin-top: -8px; margin-bottom: 1.5rem; height: 1.25rem; cursor: pointer; }
         .discord-btn { background-color: #5865F2; }
@@ -83,13 +73,13 @@
         .back-to-top:hover { color: white; }
 
         @media (max-width: 768px) {
-            .main-card { flex-direction: column; text-align: center; padding: 2.5rem 1.5rem; margin-top: 140px; }
+            .main-card { flex-direction: column; text-align: center; padding: 2.5rem 1.5rem; margin-top: 140px; margin-bottom: 0; }
             #minimal-terminal[style*="display: block"] + .main-card { margin-top: 50px; }
+            .main-card + .glass-panel { margin-top: 100px; }
             .ip-wrapper { justify-content: center; }
             .badge-container { justify-content: center; }
             #server-icon { width: 8rem; height: 8rem; }
-            .glass-panel { margin-top: 100px; }
-            #minimal-terminal { padding: 18px 22px; margin-top: 30px; }
+            .glass-panel { margin-top: 80px; }
         }
     </style>
 </head>
@@ -129,6 +119,13 @@
                     <a href="#info" class="px-6 py-3 border border-white/20 hover:bg-white/10 rounded-lg font-bold text-sm">SERVER INFO</a>
                     <a href="#rules" class="px-6 py-3 border border-white/20 hover:bg-white/10 rounded-lg font-bold text-sm">VIEW RULES</a>
                 </div>
+            </div>
+        </div>
+
+        <div id="trailer-section" class="glass-panel">
+            <h2 class="text-xl font-bold mb-6 text-gray-400 uppercase tracking-widest">Server Trailer</h2>
+            <div class="video-container">
+                <iframe id="trailer-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -196,9 +193,22 @@
     </div>
 
     <script>
+        // --- CONFIGURATION ---
+        const YOUTUBE_ID = ""; // LEAVE EMPTY TO HIDE
+        // ---------------------
+
         const ipText = "jakpat-mc.duckdns.org:51490";
         const ipBase = "jakpat-mc.duckdns.org";
         const port = "51490";
+
+        function setupTrailer() {
+            const section = document.getElementById('trailer-section');
+            const iframe = document.getElementById('trailer-video');
+            if (YOUTUBE_ID && YOUTUBE_ID.trim().length > 0) {
+                iframe.src = `https://www.youtube.com/embed/${YOUTUBE_ID}`;
+                section.style.display = "block";
+            }
+        }
 
         function fitText() {
             const wrapper = document.querySelector('.ip-wrapper');
@@ -247,7 +257,12 @@
             setTimeout(() => { document.getElementById('copy-text').innerHTML = "Click IP to copy"; }, 2500);
         }
 
-        window.addEventListener('load', () => { updateStatus(); fetchAnnouncement(); setTimeout(fitText, 150); });
+        window.addEventListener('load', () => { 
+            updateStatus(); 
+            fetchAnnouncement(); 
+            setupTrailer();
+            setTimeout(fitText, 150); 
+        });
         window.addEventListener('resize', fitText);
     </script>
 </body>
