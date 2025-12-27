@@ -18,8 +18,10 @@
 
         .main-container { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 0 15px; }
         
+        /* TERMINAL STYLING */
         #minimal-terminal {
-            display: none; margin-top: 50px; width: 100%; max-width: 950px;
+            display: none; /* Hidden by default until message.txt is loaded */
+            margin-top: 50px; width: 100%; max-width: 950px;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
             border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 28px; padding: 22px 30px;
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -44,9 +46,10 @@
             margin-bottom: 60px; 
         }
         
+        /* The gap between main card and next section */
         .main-card + .glass-panel { margin-top: 160px; }
-        #minimal-terminal[style*="display: block"] + .main-card { margin-top: 80px; }
-        
+
+        /* VIDEO SECTION */
         #trailer-section { display: none; padding: 3rem; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -59,7 +62,7 @@
         .version-text { display: inline-block; border: 1px solid rgba(255, 255, 255, 0.15); padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; }
 
         .wip-badge { background: #3b82f6; color: white; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 12px; }
-        .copy-feedback { font-size: 0.85rem; color: #6b7280; margin-top: -8px; margin-bottom: 1.5rem; height: 1.25rem; cursor: pointer; }
+        .copy-feedback { font-size: 0.85rem; color: #6b7280; margin-top: -8px; margin-bottom: 1.5rem; height: 1.25rem; cursor: pointer; transition: color 0.3s ease; }
         .discord-btn { background-color: #5865F2; }
 
         .footer-area { margin: 120px 0; text-align: center; width: 100%; }
@@ -68,7 +71,6 @@
 
         @media (max-width: 768px) {
             .main-card { flex-direction: column; text-align: center; padding: 2.5rem 1.5rem; margin-top: 140px; margin-bottom: 0; }
-            #minimal-terminal[style*="display: block"] + .main-card { margin-top: 50px; }
             .main-card + .glass-panel { margin-top: 100px; }
             .ip-wrapper { justify-content: center; }
             .badge-container { justify-content: center; }
@@ -84,7 +86,7 @@
             <span class="terminal-prompt">></span><span id="ann-text" class="text-gray-100"></span><span class="cursor"></span>
         </div>
 
-        <div class="glass-panel main-card">
+        <div class="glass-panel main-card" id="main-card-element">
             <img src="jakpat-MC_Logo-64-V2.png" id="server-icon" class="w-32 h-32 md:w-44 md:h-44 rounded-xl shadow-2xl" alt="Logo">
             <div class="flex-1 min-w-0 w-full">
                 <div class="badge-container">
@@ -187,11 +189,40 @@
     </div>
 
     <script>
-        const YOUTUBE_ID = ""; // LEAVE EMPTY TO HIDE
+        //YOUTUBE(TRAILER)
+        const YOUTUBE_ID = ""; 
+        //YOUTUBE(TRAILER)
         const ipText = "jakpat-mc.duckdns.org:51490";
 
+        // --- IMPROVED ANNOUNCEMENT FETCH ---
+        async function fetchAnnouncement() {
+            const terminal = document.getElementById('minimal-terminal');
+            const mainCard = document.getElementById('main-card-element');
+            
+            try {
+                // Add a random timestamp to bypass GitHub Pages cache
+                const response = await fetch('message.txt?nocache=' + Math.random());
+                if (response.ok) {
+                    const text = await response.text();
+                    const cleanText = text.trim();
+                    
+                    if (cleanText.length > 0) {
+                        document.getElementById('ann-text').innerHTML = cleanText;
+                        terminal.style.display = 'block';
+                        // Adjust main card margin if terminal is visible
+                        mainCard.style.marginTop = '80px';
+                    } else {
+                        terminal.style.display = 'none';
+                        mainCard.style.marginTop = '200px';
+                    }
+                }
+            } catch (e) {
+                console.error("Terminal fetch error:", e);
+                terminal.style.display = 'none';
+            }
+        }
+
         function copyIP() {
-            // Using the basic method that doesn't check for HTTPS
             const textArea = document.createElement("textarea");
             textArea.value = ipText;
             document.body.appendChild(textArea);
@@ -201,7 +232,11 @@
             
             const feedback = document.getElementById('copy-text');
             feedback.innerHTML = "✓ IP Copied!";
-            setTimeout(() => { feedback.innerHTML = "Click IP to copy"; }, 2500);
+            feedback.style.color = "#4ade80";
+            setTimeout(() => { 
+                feedback.innerHTML = "Click IP to copy"; 
+                feedback.style.color = "#6b7280";
+            }, 2500);
         }
 
         function setupTrailer() {
@@ -226,19 +261,6 @@
             }
         }
 
-        async function fetchAnnouncement() {
-            try {
-                const response = await fetch('message.txt?t=' + new Date().getTime());
-                if (response.ok) {
-                    const text = await response.text();
-                    if (text.trim().length > 1) {
-                        document.getElementById('ann-text').innerHTML = text;
-                        document.getElementById('minimal-terminal').style.display = 'block';
-                    }
-                }
-            } catch (e) { }
-        }
-
         async function updateStatus() {
             try {
                 const res = await fetch("https://api.mcsrvstat.us/2/jakpat-mc.duckdns.org:51490");
@@ -255,8 +277,8 @@
         }
 
         window.addEventListener('load', () => { 
+            fetchAnnouncement(); // Run announcement first
             updateStatus(); 
-            fetchAnnouncement(); 
             setupTrailer();
             setTimeout(fitText, 150); 
         });
