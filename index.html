@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jakpat-MC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="jakpat-MC_Logo-64-V2.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * { box-sizing: border-box; }
+        html, body { scroll-behavior: smooth; margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
+        body { 
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('jakpat-MC_Logo-no-text.png'); 
+            background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-position: center; 
+            color: white; font-family: ui-sans-serif, system-ui, sans-serif; 
+        }
+
+        .main-container { display: flex; flex-direction: column; align-items: center; width: 100%; padding: 0 15px; }
+        
+        /* TERMINAL PANEL */
+        #minimal-terminal {
+            display: none;
+            margin-top: 50px;
+            width: 100%;
+            max-width: 950px;
+            background: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+            border-radius: 28px; 
+            padding: 22px 30px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.05), 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+            font-size: clamp(14px, 1.8vw, 18px);
+            line-height: 1.6;
+        }
+
+        .terminal-prompt { color: #ef4444; font-weight: bold; margin-right: 12px; }
+        .cursor {
+            display: inline-block;
+            width: 8px; height: 1.1em;
+            background: #ef4444; margin-left: 4px;
+            animation: blink 1.2s infinite; vertical-align: middle;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* GLASS PANELS */
+        .glass-panel { 
+            background: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); 
+            width: 100%; 
+            max-width: 950px; 
+            margin-top: 160px; /* Standard gap between sections */
+        }
+
+        /* DYNAMIC TOP SPACING: If terminal is NOT visible (display: block), push card down further */
+        .main-card { display: flex; flex-direction: row; align-items: center; gap: 2.5rem; padding: 3rem; margin-top: 200px; }
+        
+        /* If terminal IS visible, tuck card closer to it */
+        #minimal-terminal[style*="display: block"] + .main-card { margin-top: 80px; }
+        
+        .info-section { padding: 3rem; }
+        .rules-section { padding: 3rem; }
+        
+        /* IP & BADGES */
+        .ip-wrapper { width: 100%; display: flex; justify-content: flex-start; overflow: visible; padding-bottom: 12px; }
+        #server-ip { font-weight: 800; line-height: 1.3; transition: color 0.3s ease; white-space: nowrap; display: inline-block; }
+        
+        .badge-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+        .version-text { display: inline-block; border: 1px solid rgba(255, 255, 255, 0.15); padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .wip-badge { background: #3b82f6; color: white; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 12px; }
+        .copy-feedback { font-size: 0.85rem; color: #6b7280; margin-top: -8px; margin-bottom: 1.5rem; height: 1.25rem; cursor: pointer; }
+        .discord-btn { background-color: #5865F2; }
+
+        .footer-area { margin: 120px 0; text-align: center; width: 100%; }
+        .back-to-top { color: #9ca3af; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: color 0.3s; }
+        .back-to-top:hover { color: white; }
+
+        @media (max-width: 768px) {
+            .main-card { flex-direction: column; text-align: center; padding: 2.5rem 1.5rem; margin-top: 140px; }
+            #minimal-terminal[style*="display: block"] + .main-card { margin-top: 50px; }
+            .ip-wrapper { justify-content: center; }
+            .badge-container { justify-content: center; }
+            #server-icon { width: 8rem; height: 8rem; }
+            .glass-panel { margin-top: 100px; }
+            #minimal-terminal { padding: 18px 22px; margin-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div id="minimal-terminal">
+            <span class="terminal-prompt">></span><span id="ann-text" class="text-gray-100"></span><span class="cursor"></span>
+        </div>
+
+        <div class="glass-panel main-card">
+            <img src="jakpat-MC_Logo-64-V2.png" id="server-icon" class="w-32 h-32 md:w-44 md:h-44 rounded-xl shadow-2xl" alt="Logo">
+            <div class="flex-1 min-w-0 w-full">
+                <div class="badge-container">
+                    <span class="version-text">Java 1.21.10+</span>
+                    <span class="version-text">Bedrock</span>
+                    <span class="version-text">Vivecraft</span>
+                </div>
+                
+                <div class="ip-wrapper">
+                    <h1 id="server-ip" class="hover:text-red-500 cursor-pointer" onclick="copyIP()">jakpat-mc.duckdns.org:51490</h1>
+                </div>
+                <div id="copy-text" class="copy-feedback" onclick="copyIP()">Click IP to copy</div>
+                
+                <div id="motd" class="text-base md:text-lg mb-6 min-h-[1.5em] leading-relaxed"><span class="text-gray-400 italic">Pinging server...</span></div>
+                
+                <div class="flex flex-wrap items-center gap-6 justify-center md:justify-start">
+                    <div class="text-xl"><span id="player-count" class="font-bold text-white">0</span> <span class="text-gray-400">Players</span></div>
+                    <div class="flex items-center gap-2">
+                        <div id="status-dot" class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <span id="status-text" class="font-bold uppercase tracking-widest text-xs text-red-500">Offline</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center md:justify-start gap-3 mt-8">
+                    <a href="https://discord.gg/wqJZUdjfAw" target="_blank" class="discord-btn px-6 py-3 rounded-lg font-bold shadow-lg text-sm transition hover:-translate-y-0.5">JOIN DISCORD</a>
+                    <a href="#info" class="px-6 py-3 border border-white/20 hover:bg-white/10 rounded-lg font-bold text-sm">SERVER INFO</a>
+                    <a href="#rules" class="px-6 py-3 border border-white/20 hover:bg-white/10 rounded-lg font-bold text-sm">VIEW RULES</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="info" class="glass-panel info-section">
+            <div class="flex items-center mb-10">
+                <h2 class="text-2xl font-bold text-[#3b82f6] uppercase tracking-widest">Project Insights</h2>
+                <span class="wip-badge">WIP</span>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div>
+                    <h4 class="text-white font-bold mb-3 border-b border-blue-500/30 pb-2">Packet Optimization</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">The network features manual, low-level optimization of data flow and packet handling. By reducing unnecessary data overhead, we ensure the most responsive player experience possible.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 border-b border-blue-500/30 pb-2">Sole Proprietorship</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">jakpat-MC is owned, developed, and moderated by a single individual. This ensures a unified technical vision, though it dictates a focused pace for large-scale updates.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 border-b border-blue-500/30 pb-2">High-Efficiency Core</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Instead of using standard "heavy" server software, we utilize optimized high-performance forks. This allows the world to run with high TPS stability even on custom-spec hardware.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 border-b border-blue-500/30 pb-2">Games Roadmap</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Development of custom-coded minigame engines is ongoing. Deployment is currently staged as we navigate the hardware expansion required to host multiple high-performance instances.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 border-b border-blue-500/30 pb-2">Hardware Innovation</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">The project runs on a custom-repurposed hardware stack. We've stripped away all non-essential OS processes to dedicate the full compute power to the Minecraft environment.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 border-b border-blue-500/30 pb-2">Connectivity Resilience</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Our architecture utilizes a distributed proxy layer and a fallback system. This ensures you remain connected to the network even if the main world requires a quick reboot.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="rules" class="glass-panel rules-section">
+            <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center text-[#ff4b4b] uppercase tracking-widest">Server & Community Rules</h2>
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">1. Conduct & Respect</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">Treat everyone with dignity. We have zero tolerance for toxicity, bullying, or hate speech (sexism, racism, etc.). Keep it PG-13—no NSFW content.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">2. Fair Play</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">No hacking, X-ray, or unfair clients. We keep the game fair for everyone. Please report bugs or exploits to the administrator instead of using them.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">3. Griefing & Theft</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">Respect the work of others. No destroying builds or stealing items, whether the land is claimed or unclaimed.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-[#3b82f6] mb-2">4. Advertising & Spam</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">Do not promote other servers, Discord links, or outside websites. Avoid spamming chat to keep it readable for everyone.</p>
+                </div>
+            </div>
+            <div class="mt-12 pt-6 border-t border-white/10 text-center italic text-gray-500 text-sm">
+                The administrator reserves the right to handle behavior that is harmful to the community.
+            </div>
+        </div>
+
+        <div class="footer-area">
+            <a href="#" class="back-to-top">BACK TO TOP ↑</a>
+        </div>
+    </div>
+
+    <script>
+        const ipText = "jakpat-mc.duckdns.org:51490";
+        const ipBase = "jakpat-mc.duckdns.org";
+        const port = "51490";
+
+        function fitText() {
+            const wrapper = document.querySelector('.ip-wrapper');
+            const text = document.getElementById('server-ip');
+            if(!text || !wrapper) return;
+            let fontSize = window.innerWidth > 768 ? 48 : 34; 
+            text.style.fontSize = fontSize + 'px';
+            const maxWidth = wrapper.clientWidth - 5;
+            while (text.offsetWidth > maxWidth && fontSize > 12) {
+                fontSize -= 1;
+                text.style.fontSize = fontSize + 'px';
+            }
+        }
+
+        async function fetchAnnouncement() {
+            try {
+                const response = await fetch('message.txt?t=' + new Date().getTime());
+                if (response.ok) {
+                    const text = await response.text();
+                    if (text.trim().length > 1) {
+                        document.getElementById('ann-text').innerHTML = text;
+                        document.getElementById('minimal-terminal').style.display = 'block';
+                    }
+                }
+            } catch (e) { }
+        }
+
+        async function updateStatus() {
+            try {
+                const res = await fetch(`https://api.mcsrvstat.us/2/${ipBase}:${port}`);
+                const data = await res.json();
+                if (data.online) {
+                    document.getElementById('motd').innerHTML = data.motd.html.join('<br>');
+                    document.getElementById('player-count').innerText = data.players.online;
+                    document.getElementById('status-text').innerText = "Online";
+                    document.getElementById('status-text').style.color = "#4ade80";
+                    document.getElementById('status-dot').style.backgroundColor = "#22c55e";
+                }
+                fitText(); 
+            } catch (err) { }
+        }
+
+        function copyIP() {
+            navigator.clipboard.writeText(ipText);
+            document.getElementById('copy-text').innerHTML = "✓ IP Copied!";
+            setTimeout(() => { document.getElementById('copy-text').innerHTML = "Click IP to copy"; }, 2500);
+        }
+
+        window.addEventListener('load', () => { updateStatus(); fetchAnnouncement(); setTimeout(fitText, 150); });
+        window.addEventListener('resize', fitText);
+    </script>
+</body>
+</html>
