@@ -97,7 +97,7 @@
                 </div>
                 
                 <div class="ip-wrapper">
-                    <h1 id="server-ip" class="hover:text-red-500 cursor-pointer" onclick="copyIP()">jakpat-mc.duckdns.org:51490</h1>
+                    <h1 id="server-ip" class="hover:text-red-500 cursor-pointer" onclick="copyIP()">mc.jakpat.dev:51490</h1>
                 </div>
                 <div id="copy-text" class="copy-feedback" onclick="copyIP()">Click IP to copy</div>
                 
@@ -194,7 +194,7 @@
         //YOUTUBE(TRAILER)
         const YOUTUBE_ID = ""; 
         //YOUTUBE(TRAILER)
-        const ipText = "jakpat-mc.duckdns.org:51490";
+        const ipText = "mc.jakpat.dev:51490";
 
         // --- IMPROVED ANNOUNCEMENT FETCH ---
         async function fetchAnnouncement() {
@@ -265,7 +265,7 @@
 
         async function updateStatus() {
             try {
-                const res = await fetch("https://api.mcsrvstat.us/2/jakpat-mc.duckdns.org:51490");
+                const res = await fetch("https://api.mcsrvstat.us/2/mc.jakpat.dev:51490");
                 const data = await res.json();
                 if (data.online) {
                     document.getElementById('motd').innerHTML = data.motd.html.join('<br>');
@@ -288,5 +288,6 @@
     </script>
 </body>
 </html>
+
 
 
