@@ -502,6 +502,11 @@ window.addEventListener('mousedown', () => {
         }
 
         window.addEventListener('resize', fitText);
+
+        // Prevent right-click menu on the video specifically
+video.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+}, false);
     </script>
 </body>
 </html>
