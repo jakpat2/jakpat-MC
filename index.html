@@ -431,13 +431,24 @@ function toggleMute() {
     
     // Update Icon UI
     const icon = document.getElementById('speaker-icon');
-    const toggleBtn = document.getElementById('mute-toggle');
     
-    icon.style.opacity = isMuted ? "0.4" : "1";
-    // Change icon path to Mute/Unmute
-    icon.innerHTML = isMuted ? 
-        '<path d="M11 5L6 9H2V15H6L11 19V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y2="9" x2="23" y2="15"></line>' : 
-        '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>';
+    if (isMuted) {
+        // CLEAN MUTE ICON (Speaker with an X)
+        icon.innerHTML = `
+            <path d="M11 5L6 9H2V15H6L11 19V5z"></path>
+            <line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="2"></line>
+            <line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="2"></line>
+        `;
+        icon.setAttribute('viewBox', '0 0 24 24');
+    } else {
+        // CLEAN UNMUTE ICON (Speaker with Waves)
+        icon.innerHTML = `
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        `;
+        icon.setAttribute('viewBox', '0 0 24 24');
+    }
 }
 
 // --- FORCED RESUME ON CLICK ---
