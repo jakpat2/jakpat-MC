@@ -334,10 +334,12 @@
             skipBtn.style.opacity = '0';
             setTimeout(() => { skipBtn.style.display = 'none'; }, 500);
         }
+
         if (!isSkipping && video.currentTime >= ORBIT_BARRIER) { 
             video.currentTime = 0.1; 
             video.play(); 
         }
+        
         if (isSkipping && video.currentTime >= ORBIT_BARRIER) {
             video.playbackRate = 1.0;
         }
@@ -357,16 +359,15 @@
     };
 
     skipBtn.onclick = () => {
-        isSkipping = true;
-        skipBtn.style.opacity = '0'; flash.style.opacity = '1';
+        skipBtn.style.opacity = '0'; 
+        flash.style.opacity = '1';
+        
         setTimeout(() => {
-            video.currentTime = ORBIT_BARRIER; 
-            video.style.opacity = '1';
-            const onSeeked = () => { 
-                setTimeout(() => flash.style.opacity = '0', 150); 
-                video.removeEventListener('seeked', onSeeked); 
-            };
-            video.addEventListener('seeked', onSeeked);
+            // Force the website to open immediately instead of waiting for the video timeline
+            revealWebsite();
+            
+            // Clean up the flash overlay smoothly
+            setTimeout(() => flash.style.opacity = '0', 150); 
         }, 300); 
     };
 
