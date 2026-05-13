@@ -357,6 +357,7 @@
     };
 
     skipBtn.onclick = () => {
+        isSkipping = true;
         skipBtn.style.opacity = '0'; flash.style.opacity = '1';
         setTimeout(() => {
             video.currentTime = ORBIT_BARRIER; 
